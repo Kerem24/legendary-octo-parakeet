@@ -17,9 +17,14 @@ CACHE = TTLCache(maxsize=1, ttl=5)
 
 app = FastAPI(title="Crypto Pulse", version="1.0.0")
 
+frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
+allowed_origins = [origin.strip() for origin in frontend_origin.split(",") if origin.strip()]
+if "*" in allowed_origins:
+    allowed_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_ORIGIN", "*")],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

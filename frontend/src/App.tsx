@@ -36,9 +36,11 @@ export default function App() {
     {},
   );
   const previousPrices = useRef<Record<string, number>>({});
+  const streamUrl =
+    import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
   useEffect(() => {
-    const source = new EventSource("http://localhost:8000/api/crypto/stream");
+    const source = new EventSource(`${streamUrl}/api/crypto/stream`);
 
     source.onmessage = (event) => {
       const payload = JSON.parse(event.data) as StreamPayload;
